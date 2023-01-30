@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mlflow_dl"
+dynamic = ["version"]
+description = "Package for interaction with MLFlow Registry"
+readme = "README.md"
+license = "LICENSE"
+requires-python = ">=3.8,<=3.11"
+dependencies = [
+    "mlflow<1.20.0",
+    "click",
+    "tqdm",
+    "protobuf<3.20.0",
+    "numpy<=1.20.0",
+    "boto3",
+    "python-dotenv",
+]
+
+[project.urls]
+Homepage = "https://github.com/dem-artem/mlflow_dl"
+
+[tool.hatch.version]
+path = "mlflow_dl/__init__.py"
+
+[project.optional-dependencies]
+dev = [
+    "coverage",
+    "flake8",
+    "flake8-annotations",
+    "flake8-unused-arguments",
+    "build",
+    "twine",
+    "bumpversion",
+]
+
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/mlflow_dl",
+]
+
+[project.scripts]
+mlflow_dl = "mlflow_dl.__main__:cli"
