@@ -2,7 +2,7 @@ import os
 import shutil
 import subprocess
 from os.path import join
-from typing import Tuple, List, Set, Optional, Union
+from typing import Tuple, List, Set, Union
 
 from mlflow.entities.model_registry import ModelVersion
 from mlflow.tracking import MlflowClient
@@ -65,21 +65,8 @@ class MlflowHelper:
         artifact_path = join(model_info.source.split("/")[-1])
         self.download_artifacts(model_info, artifact_path, dst_path)
 
-    # def download_folder_by_version(self, remote_model: ModelVersion, remote_folder_name: str) -> Tuple[str, str]:
-    #     dst_path = join(self.target_folder, remote_model.name, remote_model.version)
-    #     if not os.path.isdir(dst_path):
-    #         self.download_model_with_metainfo(remote_model, dst_path)
-    #         tmp_model_path = join(dst_path, remote_folder_name)
-    #         shutil.copytree(tmp_model_path, dst_path, dirs_exist_ok=True)
-    #         shutil.rmtree(tmp_model_path)
-    #         logger.info(f"Downloaded {remote_model.name} version {remote_model.version}")
-    #     else:
-    #         logger.warning(f"'{dst_path}' already exists, skipping")
-    #
-    #     return dst_path, remote_model.run_id
-
     def download_folder_by_model_version_sequence(
-        self, model_versions: Tuple[Tuple[str, ModelVersion], ...], no_subfolder: bool = False
+            self, model_versions: Tuple[Tuple[str, ModelVersion], ...], no_subfolder: bool = False
     ) -> Tuple[List[str], List[str]]:
         """Download a specific folder for model version
 
@@ -97,7 +84,7 @@ class MlflowHelper:
         return downloaded_models, model_run_ids
 
     def download_folder_by_model_version(
-        self, model_info: ModelVersion, remote_folder_name: str, no_subfolder: bool = False
+            self, model_info: ModelVersion, remote_folder_name: str, no_subfolder: bool = False
     ) -> str:
         dst_path = join(self.target_folder, model_info.name, model_info.version)
         if not no_subfolder:
@@ -114,7 +101,7 @@ class MlflowHelper:
         return dst_path
 
     def download_models_by_version(
-        self, models_to_download: Tuple[ModelVersion, ...], reformat_for_tf_serving: bool = False
+            self, models_to_download: Tuple[ModelVersion, ...], no_subfolder: bool = False
     ) -> Tuple[List[str], List[str]]:
         remote_model_info: ModelVersion
         downloaded_models = []
@@ -124,8 +111,8 @@ class MlflowHelper:
                 dst_path = join(self.target_folder, remote_model_info.name, remote_model_info.version)
                 if not os.path.isdir(dst_path):
                     self.download_model_with_metainfo(remote_model_info, dst_path)
-                    if reformat_for_tf_serving:
-                        self.reformat_for_tf_serving_structure(remote_model_info, dst_path)
+                    if no_subfolder:
+                        self.remove_nested_folders(remote_model_info, dst_path)
                     logger.info(f"Downloaded to '{self.target_folder}'")
                 else:
                     logger.warning(f"'{dst_path}' already exists, skipping")
@@ -138,7 +125,7 @@ class MlflowHelper:
         return downloaded_models, model_run_ids
 
     @staticmethod
-    def reformat_for_tf_serving_structure(remote_model_info: ModelVersion, dst_path: str) -> None:
+    def remove_nested_folders(remote_model_info: ModelVersion, dst_path: str) -> None:
         artifact_model_name = remote_model_info.source.split("/")[-1]
 
         #  Mlflow can save models with a different structure, we need to cover all the cases

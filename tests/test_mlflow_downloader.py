@@ -40,13 +40,13 @@ class TestMlflowDl(unittest.TestCase):
 
     def test_download_model_by_version(self) -> None:
         self.mldl.mlflow_helper.client.get_model_version = MagicMock(return_value=self.model_version)
-        self.mldl.download_model_by_version(self.model_name, self.version)
-        self.mldl.mlflow_helper.download_models_by_version.assert_called_with((self.model_version,))
+        self.mldl.download_model_by_version(self.model_name, self.version, False)
+        self.mldl.mlflow_helper.download_models_by_version.assert_called_with((self.model_version,), no_subfolder=False)
 
     def test_download_models_latest(self) -> None:
         self.mldl.mlflow_helper.get_latest_models = MagicMock(return_value=[self.model_version])
-        self.mldl.download_models_latest({self.model_name})
-        self.mldl.mlflow_helper.download_models_by_version.assert_called_with((self.model_version,))
+        self.mldl.download_models_latest({self.model_name}, False)
+        self.mldl.mlflow_helper.download_models_by_version.assert_called_with((self.model_version,), no_subfolder=False)
 
     def test_download_folder_by_model_version(self) -> None:
         self.mldl.mlflow_helper.client.get_model_version = MagicMock(return_value=self.model_version)

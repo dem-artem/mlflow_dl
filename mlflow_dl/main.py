@@ -17,17 +17,17 @@ class MlflowDl:
 
         return self._mlflow_helper
 
-    def download_model_by_version(self, remote_model_name: str, version: str) -> Tuple[List[str], List[str]]:
+    def download_model_by_version(self, remote_model_name: str, version: str, no_subfolder: bool) -> Tuple[List[str], List[str]]:
         model_version = self.mlflow_helper.client.get_model_version(remote_model_name, version)
 
-        return self.mlflow_helper.download_models_by_version((model_version,))
+        return self.mlflow_helper.download_models_by_version((model_version,), no_subfolder=no_subfolder)
 
     def download_models_latest(
-        self, remote_model_names: Set[str], is_staging: bool = False
+        self, remote_model_names: Set[str], no_subfolder: bool, is_staging: bool = False
     ) -> Tuple[List[str], List[str]]:
         latest_models = self.mlflow_helper.get_latest_models(remote_model_names, is_staging)
 
-        return self.mlflow_helper.download_models_by_version(tuple(latest_models))
+        return self.mlflow_helper.download_models_by_version(tuple(latest_models), no_subfolder=no_subfolder)
 
     def download_folder_by_model_version(
         self, remote_model_name: str, version: str, folder: str, no_subfolder: bool
