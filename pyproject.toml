@@ -7,7 +7,7 @@ name = "mlflow_dl"
 dynamic = ["version"]
 description = "Package for interaction with MLFlow Registry"
 readme = "README.md"
-license = "LICENSE"
+license = "MIT"
 requires-python = ">=3.8,<=3.11"
 dependencies = [
     "mlflow<1.20.0",
