@@ -8,14 +8,27 @@ Allows to download models from [MLFlow](https://mlflow.org/) Model Registry usin
 
 ## Installation
 
-1. Installation for production from cloned repository
+### Install from PyPi
 
 ```shell
+pip install mlflow-dl
+```
+
+### Install from GitHub
+
+```shell
+git clone git@github.com:dem-artem/mlflow_dl.git
 cd mlflow_dl
+```
+
+ - for production:
+
+```shell
+
 pip install .
 ```
 
-2. Installation for development from cloned repository
+ - for development:
 
 ```shell
 cd mlflow_dl
@@ -31,7 +44,7 @@ Built in variables:
 |------------------------------|-----------------------------------|
 | MLFLOWDL_TARGET_FOLDER_LOCAL | The folder where downloaded results placed 
 
-Also, you may need to configure variable for access to MLFlow and AWS S3 bucket. Some of them:
+Also, you may need to configure variables for access to MLFlow and AWS S3 bucket. Some of them:
 
 | ENV Name                         | Description                                                                                                                  |
 |----------------------------------|---------------------------------------|
@@ -60,13 +73,13 @@ mlflow_dl
 - Download models in "Production" stage:
 
 ```shell
-mlflow_dl download-models-production-latest -m model_name_1,model_name_2
+mlflow_dl download-production -m model_name_1,model_name_2
 ```
 
 - Download models in "Staging" stage:
 
 ```shell
-mlflow_dl download-models-staging-latest -m model_name_1,model_name_2
+mlflow_dl download-staging -m model_name_1,model_name_2
 ```
 
 - Download model by name and version number:
